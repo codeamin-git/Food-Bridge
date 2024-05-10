@@ -32,8 +32,8 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end flex-col md:flex-row items-end text-black gap-2">
-                <Link className="p-2 rounded-lg bg-[#FFFDE7]">Login</Link>
-                <Link className="p-2 rounded-lg bg-[#FFFDE7]">Sign Up</Link>
+                <Link className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Login</Link>
+                <Link className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Sign Up</Link>
             </div>
         </div>
     );
