@@ -32,13 +32,14 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end flex-col md:flex-row items-end text-black gap-2">
-                {
+                {/* {
                     user ? <Link onClick={logOut} className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Log Out</Link> : <>
                     <Link to='/login' className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Login</Link>
                 <Link to='/signup' className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Sign Up</Link>
                     </>  
-                }
-                
+                } */}
+                <Link to='/login' className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Login</Link>
+                <Link to='/signup' className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Sign Up</Link>
             </div>
         </div>
     );
