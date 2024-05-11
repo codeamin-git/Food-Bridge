@@ -6,11 +6,14 @@ import Home from "../src/pages/Home/Home";
 import ViewDetails from "../src/pages/ViewDetails";
 import Login from "../src/pages/Login";
 import SignUp from "../src/pages/SignUp";
+import AddAFood from "../src/pages/AddAFood";
+import Error from "../src/pages/Error";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <Root></Root>,
+        errorElement: <Error></Error>,
         children: [
             {
                 path: '/',
@@ -28,6 +31,10 @@ const router = createBrowserRouter([
                 path: '/food/:id',
                 element: <ViewDetails></ViewDetails>,
                 loader: ({params}) => fetch(`${import.meta.env.VITE_API_URL}/food/${params.id}`)
+            },
+            {
+                path: '/addAFood',
+                element: <AddAFood></AddAFood>
             }
         ]
     },

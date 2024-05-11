@@ -7,7 +7,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-import './Banner.css';
+// import './Banner.css';
 
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
@@ -23,8 +23,9 @@ const Banner = () => {
           <Swiper
         spaceBetween={30}
         centeredSlides={true}
+        loop={true}
         autoplay={{
-          delay: 4000,
+          delay: 2500,
           disableOnInteraction: false,
         }}
         pagination={{

@@ -6,7 +6,7 @@ const Navbar = () => {
     const navLinks = <>
         <li><Link to='/'>Home</Link></li>
         <li><Link>Available Foods</Link></li>
-        <li><Link>Add A Food</Link></li>
+        <li><Link to='/addAFood'>Add A Food</Link></li>
         <li><Link>Manage My Foods</Link></li>
         <li><Link>My Food Request</Link></li>
     </>
@@ -40,6 +40,7 @@ const Navbar = () => {
                 } */}
                 <Link to='/login' className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Login</Link>
                 <Link to='/signup' className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Sign Up</Link>
+                <Link onClick={logOut} className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Log Out</Link>
             </div>
         </div>
     );
