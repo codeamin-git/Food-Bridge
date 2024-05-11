@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import logo from "../../public/food-logo.png"
+import useAuth from "../../hooks/useAuth";
 const Navbar = () => {
-
+    const {user, logOut} = useAuth()
     const navLinks = <>
         <li><Link to='/'>Home</Link></li>
         <li><Link>Available Foods</Link></li>
@@ -9,7 +10,6 @@ const Navbar = () => {
         <li><Link>Manage My Foods</Link></li>
         <li><Link>My Food Request</Link></li>
     </>
-
     return (
         <div className="navbar bg-[#EF5350] text-[#FFFDE7]">
             <div className="navbar-start">
@@ -32,8 +32,13 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end flex-col md:flex-row items-end text-black gap-2">
-                <Link className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Login</Link>
-                <Link className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Sign Up</Link>
+                {
+                    user ? <Link onClick={logOut} className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Log Out</Link> : <>
+                    <Link to='/login' className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Login</Link>
+                <Link to='/signup' className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Sign Up</Link>
+                    </>  
+                }
+                
             </div>
         </div>
     );
