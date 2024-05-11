@@ -1,78 +1,93 @@
-import { createContext, useEffect, useState } from "react";
-import auth from "../firebase/firebase.config";
-import { GithubAuthProvider, GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
-import toast from "react-hot-toast";
+   /* eslint-disable react/prop-types */
+import { createContext, useEffect, useState } from 'react'
+import {
+    GithubAuthProvider,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+} from 'firebase/auth'
 
-export const AuthContext = createContext(null);
+import axios from 'axios'
+import app from '../firebase/firebase.config'
 
-const AuthProvider = ({children}) => {
+export const AuthContext = createContext(null)
+const auth = getAuth(app)
+const googleProvider = new GoogleAuthProvider()
+const githubProvider = new GithubAuthProvider()
 
-    const [user, setUser] = useState(null)
-    const [loading, setLoading] = useState(true)
-    const googleProvider = new GoogleAuthProvider()
-    const githubProvider = new GithubAuthProvider()
+const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-    // create user with email and password
-    const createUser = (email, password)=>{
-        setLoading(true)
-        return createUserWithEmailAndPassword(auth, email, password)
-    }
+  const createUser = (email, password) => {
+    setLoading(true)
+    return createUserWithEmailAndPassword(auth, email, password)
+  }
 
-    // login user with email and password
-    const signInUser = (email, password)=>{
-        setLoading(true)
-        return signInWithEmailAndPassword(auth, email, password)
-    }
+  const signIn = (email, password) => {
+    setLoading(true)
+    return signInWithEmailAndPassword(auth, email, password)
+  }
 
-    // google login
-    const googleLogin = () => {
-        setLoading(true)
-        return signInWithPopup(auth, googleProvider)
-    }
+  const signInWithGoogle = () => {
+    setLoading(true)
+    return signInWithPopup(auth, googleProvider)
+  }
 
-    // github login
-    const githubLogin = () => {
+     const githubLogin = () => {
         setLoading(true);
         return signInWithPopup(auth, githubProvider)
     }
 
-    // log out
-    const logOut = ()=>{
-        setUser(null)
-        signOut(auth)
-        .then(()=>{
-            console.log(user.email, 'signed out successfully');
-            toast.success('You are logged out.')
-        })
-    }
+  const logOut = async () => {
+    setLoading(true)
+    const { data } = await axios(`${import.meta.env.VITE_API_URL}/logout`, {
+      withCredentials: true,
+    })
+    console.log(data)
+    return signOut(auth)
+  }
 
-    // observer
-    useEffect(()=>{
-        const unSubscribe = onAuthStateChanged(auth, (user)=>{
-            if(user){
-                setUser(user)
-            }
-            setLoading(false)
-        })
-        return ()=> unSubscribe()
-    }, [])
-    
-    const authInfo = {
-        user,
-        createUser,
-        signInUser,
-        googleLogin,
-        githubLogin,
-        logOut,
-        loading,
-    }
-    return (
-        <div>
-            <AuthContext.Provider value={authInfo}>
-                {children}
-            </AuthContext.Provider>
-        </div>
-    );
-};
+  const updateUserProfile = (name, photo) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photo,
+    })
+  }
 
-export default AuthProvider;
+  // onAuthStateChange
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, currentUser => {
+      setUser(currentUser)
+      console.log('CurrentUser-->', currentUser)
+      setLoading(false)
+    })
+    return () => {
+      return unsubscribe()
+    }
+  }, [])
+
+  const authInfo = {
+    user,
+    setUser,
+    loading,
+    setLoading,
+    createUser,
+    signIn,
+    signInWithGoogle,
+    githubLogin,
+    logOut,
+    updateUserProfile,
+  }
+
+  return (
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+  )
+}
+
+export default AuthProvider

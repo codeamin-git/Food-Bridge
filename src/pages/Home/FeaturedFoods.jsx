@@ -1,8 +1,26 @@
+import { Link } from "react-router-dom";
 
-const FeaturedFoods = () => {
+const FeaturedFoods = ({ food }) => {
+    const {_id, foodImage, foodName, donator, foodQuantity, pickupLocation, expiredDate, additionalNotes } = food
     return (
-        <div>
-            <h2>this is featured foods section</h2>
+        <div className="card card-compact bg-base-100 shadow-xl">
+            <figure><img src={foodImage} alt="Shoes" /></figure>
+            <div className="card-body">
+                <h2 className="card-title">{foodName}</h2>
+                <p>{pickupLocation}</p>
+                <p>{expiredDate}</p>
+                <p>{additionalNotes}</p>
+                <div className="flex items-center justify-start border rounded-xl gap-2">
+                    <p>Donator: </p>
+                    <img src={donator.image} alt="" className="w-10 rounded-full"/>
+                    <p>{donator.name}</p>
+                </div>
+                <div className="card-actions justify-center">
+                    <Link to={`/food/${_id}`}>
+                    <button className="btn btn-info">View Details</button>
+                    </Link>
+                </div>
+            </div>
         </div>
     );
 };
