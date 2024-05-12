@@ -8,6 +8,8 @@ import Login from "../src/pages/Login";
 import SignUp from "../src/pages/SignUp";
 import AddAFood from "../src/pages/AddAFood";
 import Error from "../src/pages/Error";
+import AvailableFoods from "../src/pages/AvailableFoods";
+import MyFoodRequest from "../src/pages/MyFoodRequest";
 
 const router = createBrowserRouter([
     {
@@ -35,7 +37,16 @@ const router = createBrowserRouter([
             {
                 path: '/addAFood',
                 element: <AddAFood></AddAFood>
-            }
+            },
+            {
+                path: '/availableFoods',
+                element: <AvailableFoods></AvailableFoods>
+            },
+            // {
+            //     path: '/myFoodReq',
+            //     element: <MyFoodRequest></MyFoodRequest>,
+            //     loader: ()=> fetch(`${import.meta.env.VITE_API_URL}/reqFood`)
+            // }
         ]
     },
 ]);

@@ -7,9 +7,9 @@ const FeaturedFoods = ({ food }) => {
             <figure><img src={foodImage} alt="Shoes" /></figure>
             <div className="card-body">
                 <h2 className="card-title">{foodName}</h2>
-                <p>{pickupLocation}</p>
-                <p>{expiredDate}</p>
-                <p>{additionalNotes}</p>
+                <p>Pickup Location: {pickupLocation}</p>
+                <p>Expire On: {expiredDate}</p>
+                <p>Notes: {additionalNotes}</p>
                 <div className="flex items-center justify-start border rounded-xl gap-2">
                     <p>Donator: </p>
                     <img src={donatorImage} alt="" className="w-10 rounded-full"/>

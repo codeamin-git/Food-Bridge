@@ -7,14 +7,14 @@ const Footer = () => {
             <div className='container px-6 py-8 mx-auto'>
                 <div className='flex flex-col items-center text-center'>
                     <div className='flex gap-2 items-center'>
-                        <img className='w-auto h-7' src={logo} alt='' />
-                        <span>SoloSphere</span>
+                        <img className='w-auto h-10' src={logo} alt='' />
+                        <span className='text-2xl'>Food Bridge</span>
                     </div>
 
                     <div className='flex flex-wrap justify-center mt-6 -mx-4'>
                         <a
                             href='#'
-                            className='mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-blue-500 '
+                            className='mx-4 text-sm transition-colors duration-300 hover:text-blue-500 '
                             aria-label='Reddit'
                         >
                             {' '}
@@ -23,7 +23,7 @@ const Footer = () => {
 
                         <a
                             href='#'
-                            className='mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-blue-500 '
+                            className='mx-4 text-sm transition-colors duration-300 hover:text-blue-500 '
                             aria-label='Reddit'
                         >
                             {' '}
@@ -32,7 +32,7 @@ const Footer = () => {
 
                         <a
                             href='#'
-                            className='mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-blue-500 '
+                            className='mx-4 text-sm transition-colors duration-300 hover:text-blue-500 '
                             aria-label='Reddit'
                         >
                             {' '}
@@ -41,7 +41,7 @@ const Footer = () => {
 
                         <a
                             href='#'
-                            className='mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-blue-500 '
+                            className='mx-4 text-sm transition-colors duration-300 hover:text-blue-500 '
                             aria-label='Reddit'
                         >
                             {' '}
@@ -50,7 +50,7 @@ const Footer = () => {
 
                         <a
                             href='#'
-                            className='mx-4 text-sm text-gray-600 transition-colors duration-300 hover:text-blue-500 '
+                            className='mx-4 text-sm transition-colors duration-300 hover:text-blue-500 '
                             aria-label='Reddit'
                         >
                             {' '}
@@ -62,14 +62,14 @@ const Footer = () => {
                 <hr className='my-6 border-gray-200 md:my-10 ' />
 
                 <div className='flex flex-col items-center sm:flex-row sm:justify-between'>
-                    <p className='text-sm text-gray-500 '>
+                    <p className='text-sm text-[#FFFDE7] '>
                         © Copyright 2021. All Rights Reserved.
                     </p>
 
                     <div className='flex -mx-2'>
                         <a
                             href='#'
-                            className='mx-2 text-gray-600 transition-colors duration-300 hover:text-blue-500 '
+                            className='mx-2 transition-colors duration-300 hover:text-blue-500 '
                             aria-label='Reddit'
                         >
                             <svg
@@ -84,7 +84,7 @@ const Footer = () => {
 
                         <a
                             href='#'
-                            className='mx-2 text-gray-600 transition-colors duration-300 hover:text-blue-500 '
+                            className='mx-2 transition-colors duration-300 hover:text-blue-500 '
                             aria-label='Facebook'
                         >
                             <svg
@@ -99,7 +99,7 @@ const Footer = () => {
 
                         <a
                             href='#'
-                            className='mx-2 text-gray-600 transition-colors duration-300 hover:text-blue-500 '
+                            className='mx-2 transition-colors duration-300 hover:text-blue-500 '
                             aria-label='Github'
                         >
                             <svg
