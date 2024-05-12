@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { updateProfile } from 'firebase/auth';
 import useAuth from '../../hooks/useAuth';
+import axios from 'axios';
 
 const SignUp = () => {
     const {createUser} = useAuth();
@@ -16,25 +17,38 @@ const SignUp = () => {
     const navigate = useNavigate()
     const from = '/'
 
-    const onSubmit = (data) => {
-        const {name,email,photo,password} = data;
-        createUser(email,password)
-        .then(result => {
+    const onSubmit = async (data) => {
+        try {
+            const { name, email, photo, password } = data;
+    
+            // Create user with email and password
+            const result = await createUser(email, password);
             console.log(result.user);
-            const newUser = result.user
-            updateProfile(newUser, {
+    
+            // Update user profile with name and photo
+            const newUser = result.user;
+            await updateProfile(newUser, {
                 displayName: name,
                 photoURL: photo
-            })
-            if (newUser) {
-                navigate(from)
-                toast.success("Successfully registered!")
-            }
-        })
-        .catch(error=>{
-            console.error(error)
-        })
+            });
+            const {res} = await axios.post(
+                `${import.meta.env.VITE_API_URL}/jwt`,
+                {
+                    email: result?.user?.email,
+                },
+                { withCredentials: true }
+            )
+            
+            console.log(res);
+            // Navigate and show success message
+            navigate(from);
+            toast.success("Successfully registered!");
+        } catch (error) {
+            console.error(error);
+            // Handle error if any
+        }
     }
+    
 
     return (
         <div className="hero min-h-screen bg-base-200">

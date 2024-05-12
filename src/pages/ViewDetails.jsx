@@ -206,7 +206,9 @@ const ViewDetails = () => {
                 </div>
 
                 <div className="form-control mt-6">
-                    <input type="submit" value="Request" className="btn btn-success " />
+                    <input type="submit" value="Request" 
+                    disabled={food.foodStatus === 'requested'}
+                    className="btn btn-success " />
                 </div>
             </form>
                             <div className="flex justify-center">
