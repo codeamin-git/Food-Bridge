@@ -28,7 +28,9 @@ const ViewDetails = () => {
             ...data, requester: user?.email, donatorEmail, donatorName, donatorImage, foodStatus: "requested" 
         }
         try {
-            const {data} = await axios.put(`${import.meta.env.VITE_API_URL}/reqFood/${_id}`, myReqFood  
+            const {data} = await axios.put(`${import.meta.env.VITE_API_URL}/reqFood/${_id}`, myReqFood , {
+                withCredentials: true
+            } 
             )
             console.log(data);
             toast.success('Requested This Food!')

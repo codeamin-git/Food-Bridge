@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import useAuth from "../../hooks/useAuth";
-import axios from 'axios';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const MyFoodRequest = () => {
+    const axiosSecure = useAxiosSecure()
     const { user } = useAuth();
     const [requestedFoods, setRequestedFoods] = useState([]);
 
     useEffect(() => {
-
         const fetchRequestedFoods = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}/myFoodReq/${user?.email}`);
+                const response = await axiosSecure.get(`/myFoodReq/${user?.email}`);
                 setRequestedFoods(response.data);
             } catch (error) {
                 console.error('Error fetching requested foods:', error);

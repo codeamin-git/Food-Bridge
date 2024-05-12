@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../public/food-logo.png"
 import useAuth from "../../hooks/useAuth";
+import toast from "react-hot-toast";
 const Navbar = () => {
     const {user, logOut} = useAuth()
+    const navigate = useNavigate()
     const navLinks = <>
         <li><Link to='/'>Home</Link></li>
         <li><Link to='/availableFoods'>Available Foods</Link></li>
@@ -10,6 +12,11 @@ const Navbar = () => {
         <li><Link>Manage My Foods</Link></li>
         <li><Link to='/myFoodReq'>My Food Request</Link></li>
     </>
+    const handleLogout = ()=>{
+        toast.success('Successfully Logged Out')
+        navigate('/login')
+        logOut()
+    }
     return (
         <div className="navbar bg-[#EF5350] text-[#FFFDE7]">
             <div className="navbar-start">
@@ -40,7 +47,7 @@ const Navbar = () => {
                 } */}
                 <Link to='/login' className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Login</Link>
                 <Link to='/signup' className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Sign Up</Link>
-                <Link onClick={logOut} className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Log Out</Link>
+                <Link onClick={handleLogout} className="p-2 btn-ghost rounded-lg bg-[#FFFDE7]">Log Out</Link>
             </div>
         </div>
     );
