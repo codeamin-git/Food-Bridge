@@ -2,6 +2,7 @@ import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import {useQuery} from '@tanstack/react-query'
 import Error from './Error';
+import Loading from "./Loading";
 
 const MyFoodRequest = () => {
     const axiosSecure = useAxiosSecure()
@@ -32,7 +33,7 @@ const MyFoodRequest = () => {
         enabled: !!user?.email,
     });
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Loading></Loading>;
     if (isError) return <Error></Error>;
 
     return (

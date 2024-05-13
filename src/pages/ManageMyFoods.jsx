@@ -7,6 +7,8 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Swal from 'sweetalert2'
+import Loading from "./Loading";
 
 const ManageMyFoods = () => {
     const axiosSecure = useAxiosSecure()
@@ -49,7 +51,32 @@ const ManageMyFoods = () => {
         enabled: !!user?.email,
     });
 
-    if (isLoading) return <div>Loading...</div>;
+    const handleDelete = async id => {
+        // Show SweetAlert confirmation dialog
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this food item!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const { data } = await axiosSecure.delete(`/food/${id}`);
+                    console.log(data);
+                    toast.success('Deleted Successfully');
+                    refetch();
+                } catch (err) {
+                    console.log(err.message);
+                    toast.error(err.message);
+                }
+            }
+        });
+    };
+
+    if (isLoading) return <Loading></Loading>;
     if (isError) return <Error></Error>;
 
     return (
@@ -220,7 +247,7 @@ const ManageMyFoods = () => {
 
                {/* delete button */}
                 <div>
-                <button  className="" ><RiDeleteBin6Line className="text-red-500 text-lg"/></button>
+                <button onClick={()=>handleDelete(food._id)} className="" ><RiDeleteBin6Line className="text-red-500 text-lg"/></button>
                 </div>
                </div>
                             </td>

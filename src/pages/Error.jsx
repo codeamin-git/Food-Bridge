@@ -12,12 +12,16 @@ const Error = () => {
     };
     return (
         <div className=''>
-        <Lottie options={defaultOptions}        
+        <Lottie options={defaultOptions}
+        height={600}        
+        width={600}
           
         />
+        <div className='flex items-center justify-center'>
         <Link to='/'>
-        <button className='w-full btn btn-accent'>Back to Home</button>
+        <button className='btn btn-accent'>Back to Home</button>
         </Link>
+        </div>
     </div>
     );
 };
