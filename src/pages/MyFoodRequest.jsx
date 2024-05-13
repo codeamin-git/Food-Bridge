@@ -3,6 +3,7 @@ import useAxiosSecure from '../../hooks/useAxiosSecure';
 import {useQuery} from '@tanstack/react-query'
 import Error from './Error';
 import Loading from "./Loading";
+import { Helmet } from "react-helmet-async";
 
 const MyFoodRequest = () => {
     const axiosSecure = useAxiosSecure()
@@ -38,6 +39,9 @@ const MyFoodRequest = () => {
 
     return (
         <div className="overflow-x-auto">
+            <Helmet>
+                <title>Food Bridge | My Food Request</title>
+            </Helmet>
             <table className="table">
                 {/* head */}
                 <thead>

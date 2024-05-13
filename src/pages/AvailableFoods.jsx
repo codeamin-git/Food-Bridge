@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Error from "./Error";
+import { Helmet } from "react-helmet-async";
 
 const AvailableFoods = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -37,6 +38,9 @@ const AvailableFoods = () => {
 
     return (
         <div className="mt-6">
+            <Helmet>
+                <title>Food Bridge | Available Foods</title>
+            </Helmet>
             <div className="flex flex-col md:flex-row items-center mb-4 justify-center gap-2">
                 <input
                     type="text"

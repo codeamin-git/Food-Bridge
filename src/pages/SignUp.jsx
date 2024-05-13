@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { updateProfile } from 'firebase/auth';
 import useAuth from '../../hooks/useAuth';
 import axios from 'axios';
+import { Helmet } from 'react-helmet-async';
 
 const SignUp = () => {
     const {createUser} = useAuth();
@@ -52,9 +53,12 @@ const SignUp = () => {
 
     return (
         <div className="hero min-h-screen bg-base-200">
+            <Helmet>
+                <title>Food Bridge | Sign Up</title>
+            </Helmet>
             <div className="hero-content flex-col lg:flex-row-reverse">
                 <div className="text-center lg:text-left">
-                    <h1 className="text-5xl font-bold">Register now!</h1>
+                    <h1 className="text-5xl font-bold">Sign Up now!</h1>
                     <img src="https://i.ibb.co/vH615zs/Humaaans-Wireframe.png" alt="" />
                 </div>
                 <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">

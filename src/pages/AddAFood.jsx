@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { Helmet } from "react-helmet-async";
 
 const AddAFood = () => {
     const {user} = useAuth()
@@ -32,6 +33,9 @@ const AddAFood = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>Food Bridge | Add A Food</title>
+            </Helmet>
             <form onSubmit={handleSubmit(onSubmit)} className="card-body">
                 {/* food name & food image */}
                 <div className="flex flex-col md:flex-row gap-4 w-full">

@@ -9,6 +9,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Swal from 'sweetalert2'
 import Loading from "./Loading";
+import { Helmet } from "react-helmet-async";
 
 const ManageMyFoods = () => {
     const axiosSecure = useAxiosSecure()
@@ -81,6 +82,9 @@ const ManageMyFoods = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>Food Bridge | Manage My Food</title>
+            </Helmet>
             <table className="table">
                 <thead>
                     <tr>
