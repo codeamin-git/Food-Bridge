@@ -1,39 +1,36 @@
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { useLoaderData } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
-import React from "react";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Error from "./Error";
+import { GrUpdate } from "react-icons/gr";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import toast from "react-hot-toast";
 
+const ManageMyFoods = () => {
+    const axiosSecure = useAxiosSecure()
+    const { user } = useAuth()
 
-const ViewDetails = () => {
-    const food = useLoaderData()
-    const { _id, foodImage, foodName, donatorName, donatorEmail,donatorImage, foodQuantity, pickupLocation, expiredDate, additionalNotes } = food
-
-    // modal
-    const {user} = useAuth()
     const {
         register,
-        watch,
-        setValue,
         handleSubmit,
         formState: { errors },
     } = useForm()
 
-    const onSubmit = async (data) =>{
+    const onSubmit = async (data, food) =>{
         data.foodQuantity = parseInt(data.foodQuantity)
-        const myReqFood = {
-            ...data, requester: user?.email, donatorEmail, donatorName, donatorImage, foodStatus: "requested" 
+        const updatedFood = {
+            ...data 
         }
         try {
-            const {data} = await axios.put(`${import.meta.env.VITE_API_URL}/reqFood/${_id}`, myReqFood , {
+            const response = await axios.put(`${import.meta.env.VITE_API_URL}/update/${food._id}`, updatedFood , {
                 withCredentials: true
             } 
             )
-            console.log(data);
-            toast.success('Requested This Food!')
+            console.log(response.data);
+            toast.success('Updated This Food!')
+            refetch()
            
         }
         catch(err){
@@ -41,36 +38,58 @@ const ViewDetails = () => {
         }
     }
 
-    const getCurrentDate = () => {
-        const today = new Date();
-        return today.toLocaleDateString();
+    const fetchDonatedFoods = async () => {
+        const response = await axiosSecure.get(`/manageMyFoods/${user?.email}`);
+        return response.data;
     };
-    React.useEffect(() => {
-        setValue("requestDate", getCurrentDate());
-    }, []);
 
-    // Watch for changes in the requestDate field
-    const requestDate = watch("requestDate");
-    
+    const { data: myDonatedFoods, isLoading, isError, refetch } = useQuery({
+        queryFn: fetchDonatedFoods, 
+        queryKey: ['myDonatedFoods', user?.email],
+        enabled: !!user?.email,
+    });
+
+    if (isLoading) return <div>Loading...</div>;
+    if (isError) return <Error></Error>;
 
     return (
-        <div className="hero min-h-screen bg-base-200">
-            <div className="hero-content flex-col-reverse lg:flex-row-reverse">
-                {/* request modal */}
-                <div>
+        <div>
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>Food Name</th>
+                        <th>Quantity</th>
+                        <th>Expiration Date</th>
+                        <th>Update/Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {myDonatedFoods.map((food) => (
+                        <tr key={food._id}>
+                            <td className="flex items-center gap-1"><img src={food.foodImage} alt="" className="w-12 rounded-lg"/>{food.foodName}</td>
+                            <td>{food.foodQuantity}</td>
+                            <td>{food.expiredDate}</td>
+                            <td >
+                               
+                               
+               <div className="flex items-center gap-4">
+                 {/* Update Modal */}
+               <div>
                     {/* Open the modal using document.getElementById('ID').showModal() method */}
-                    <button className="btn btn-warning" onClick={() => document.getElementById('my_modal_5').showModal()}>Request</button>
+                    <button className="" onClick={() => document.getElementById('my_modal_5').showModal()}>
+                         <GrUpdate className="text-green-500 text-base"/>
+                    </button>
                     <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
                         <div className="modal-box">
                             {/* modal form */}
-                            <form onSubmit={handleSubmit(onSubmit)} className="card-body">
+                            <form onSubmit={handleSubmit((data) =>onSubmit(data, food, refetch))} className="card-body">
                 {/* food name & food image */}
                 <div className="flex flex-col md:flex-row gap-4 w-full">
                     <div className="form-control w-full">
                         <label className="label">
                             <span className="label-text font-medium">Food Name</span>
                         </label>
-                        <input defaultValue={foodName} readOnly
+                        <input defaultValue={food.foodName}
                             {...register("foodName", { required: true })}
                             type="text" placeholder="food name" className="input input-bordered" required />
                         {errors.foodName && <span className="text-red-500">This field is required</span>}
@@ -79,7 +98,7 @@ const ViewDetails = () => {
                         <label className="label">
                             <span className="label-text font-medium">Food Image</span>
                         </label>
-                        <input defaultValue={foodImage} readOnly
+                        <input defaultValue={food.foodImage}
                             {...register("foodImage", { required: true })}
                             type="text" placeholder="food image URL" className="input input-bordered" required />
                         {errors.foodImage && <span className="text-red-500">This field is required</span>}
@@ -92,7 +111,7 @@ const ViewDetails = () => {
                         <label className="label">
                             <span className="label-text font-medium">Food Quantity</span>
                         </label>
-                        <input defaultValue={foodQuantity} readOnly
+                        <input defaultValue={food.foodQuantity}
                             {...register("foodQuantity", { required: true, min: 1 })}
                             type="number" placeholder="food amount" className="input input-bordered" required />
                         {errors.foodQuantity && <span className="text-red-500">This field is required</span>}
@@ -101,7 +120,7 @@ const ViewDetails = () => {
                         <label className="label">
                             <span className="label-text font-medium">Pickup Location</span>
                         </label>
-                        <input defaultValue={pickupLocation} readOnly
+                        <input defaultValue={food.pickupLocation}
                             {...register("pickupLocation", { required: true })}
                             type="text" placeholder="type pickup location" className="input input-bordered" required />
                         {errors.pickupLocation && <span className="text-red-500">This field is required</span>}
@@ -112,23 +131,9 @@ const ViewDetails = () => {
                 <div className="flex flex-col md:flex-row gap-4 w-full">
                     <div className="form-control w-full">
                         <label className="label">
-                            <span className="label-text font-medium">Request Date</span>
-                        </label>
-                        <DatePicker selected={requestDate} 
-                
-                onChange={(date) => setValue("requestDate", date)}
-                {...register("requestDate", {required: true})}
-                dateFormat="MM-dd-yyyy" // Set the date format
-                className="input input-bordered"
-            
-            />
-                        {errors.requestDate && <span className="text-red-500">This field is required</span>}
-                    </div>
-                    <div className="form-control w-full">
-                        <label className="label">
                             <span className="label-text font-medium">Expired Date</span>
                         </label>
-                        <input defaultValue={expiredDate} readOnly
+                        <input defaultValue={food.expiredDate}
                             {...register("expiredDate", { required: true })}
                             type="date" placeholder="food name" className="input input-bordered" required />
                         {errors.expiredDate && <span className="text-red-500">This field is required</span>}
@@ -138,7 +143,7 @@ const ViewDetails = () => {
                             <span className="label-text font-medium">Additional Notes</span>
                         </label>
                         <input
-                        defaultValue={additionalNotes}
+                        defaultValue={food.additionalNotes}
                             {...register("additionalNotes", { required: true })}
                             type="text" placeholder="type additional notes here" className="input input-bordered" required />
                         {errors.additionalNotes && <span className="text-red-500">This field is required</span>}
@@ -151,7 +156,7 @@ const ViewDetails = () => {
                         <label className="label">
                             <span className="label-text font-medium">Donator Name</span>
                         </label>
-                        <input defaultValue={donatorName} readOnly
+                        <input defaultValue={food.donatorName}
                             {...register("donatorName")}
                             type="text" placeholder="food name" className="input input-bordered" />
                              
@@ -162,7 +167,7 @@ const ViewDetails = () => {
                             <span className="label-text font-medium">Donator Image</span>
                         </label>
                         <input
-                        defaultValue={donatorImage} readOnly
+                        defaultValue={food.donatorImage}
                             {...register("donatorImage", { required: true })}
                             type="text" placeholder="" className="input input-bordered"/>
                             
@@ -176,7 +181,7 @@ const ViewDetails = () => {
                         <label className="label">
                             <span className="label-text font-medium">Donator Email</span>
                         </label>
-                        <input defaultValue={donatorEmail} readOnly
+                        <input defaultValue={food.donatorEmail}
                             {...register("donatorEmail")}
                             type="text" placeholder="food name" className="input input-bordered"/>
                              
@@ -195,22 +200,9 @@ const ViewDetails = () => {
                     </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-4 w-full">
-                    <div className="form-control w-full">
-                        <label className="label">
-                            <span className="label-text font-medium">Requester</span>
-                        </label>
-                        <input defaultValue={user?.email} readOnly
-                            {...register("requester")}
-                            type="text" placeholder="food name" className="input input-bordered"/>
-                             
-                       
-                    </div>
-                </div>
 
                 <div className="form-control mt-6">
-                    <input type="submit" value="Request" 
-                    disabled={food.foodStatus === 'requested'}
+                    <input type="submit" value="Update" 
                     className="btn btn-success " />
                 </div>
             </form>
@@ -225,21 +217,19 @@ const ViewDetails = () => {
 
                     </dialog>
                 </div>
-                <div className="text-center lg:text-left">
-                    <div>
-                        <h2>Donor Name: {donatorName}</h2>
-                        <p>Pickup Location: {pickupLocation}</p>
-                    </div>
-                    <h1 className="text-4xl font-bold">{foodName}</h1>
-                    <p>Food Quantity: {foodQuantity}</p>
-                    <p>Expire On: {expiredDate}</p>
+
+               {/* delete button */}
+                <div>
+                <button  className="" ><RiDeleteBin6Line className="text-red-500 text-lg"/></button>
                 </div>
-                <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-                    <img src={foodImage} alt="" className="rounded-xl" />
-                </div>
-            </div>
+               </div>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };
 
-export default ViewDetails;
+export default ManageMyFoods;

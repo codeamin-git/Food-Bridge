@@ -4,7 +4,7 @@ import Footer from "./Footer";
 
 const Root = () => {
     return (
-        <div>
+        <div className="font-lato">
             <Navbar></Navbar>
             <div className="min-h-[calc(100vh-306px)]">
             <Outlet></Outlet>

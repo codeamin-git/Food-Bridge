@@ -11,6 +11,7 @@ import Error from "../src/pages/Error";
 import AvailableFoods from "../src/pages/AvailableFoods";
 import MyFoodRequest from "../src/pages/MyFoodRequest";
 import PrivateRoute from "./PrivateRoute";
+import ManageMyFoods from "../src/pages/ManageMyFoods";
 
 const router = createBrowserRouter([
     {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
             {
                 path: '/myFoodReq',
                 element: <PrivateRoute><MyFoodRequest></MyFoodRequest></PrivateRoute>
+            },
+            {
+                path: '/manageMyFoods',
+                element: <PrivateRoute><ManageMyFoods></ManageMyFoods></PrivateRoute>
             }
         ]
     },
