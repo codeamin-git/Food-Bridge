@@ -1,11 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Error from "./Error";
 import { GrUpdate } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import toast from "react-hot-toast";
 import Swal from 'sweetalert2'
 import Loading from "./Loading";
@@ -17,40 +16,44 @@ const ManageMyFoods = () => {
 
     const {
         register,
+        setValue,
         handleSubmit,
         formState: { errors },
     } = useForm()
 
-    const onSubmit = async (data, food) =>{
-        data.foodQuantity = parseInt(data.foodQuantity)
-        const updatedFood = {
-            ...data 
-        }
-        try {
-            const response = await axios.put(`${import.meta.env.VITE_API_URL}/update/${food._id}`, updatedFood , {
-                withCredentials: true
-            } 
-            )
-            console.log(response.data);
-            toast.success('Updated This Food!')
+    const {mutateAsync} = useMutation({
+        mutationFn: async ({updatedFood, id})=>{
+            const {data} = await axiosSecure.put(`/update/${id}`, updatedFood)
+            return data
+        },
+        onSuccess: ()=>{
+            toast.success('Food Updated Successfully!')
             refetch()
-           
         }
-        catch(err){
-            console.log(err);
-        }
+    })
+
+    const onSubmit = async (data, id) =>{
+        data.foodQuantity = parseInt(data.foodQuantity)
+        
+        const updatedFood = {...data}
+        console.log(updatedFood);
+                await mutateAsync({ updatedFood, id});
+                refetch()
     }
 
     const fetchDonatedFoods = async () => {
-        const response = await axiosSecure.get(`/manageMyFoods/${user?.email}`);
-        return response.data;
+        const {data} = await axiosSecure.get(`/manageMyFoods/${user?.email}`);
+        return data;
     };
 
-    const { data: myDonatedFoods, isLoading, isError, refetch } = useQuery({
-        queryFn: fetchDonatedFoods, 
+    const { data: myDonatedFoods = [], isLoading, isError, error, refetch } = useQuery({
+        queryFn: () => fetchDonatedFoods(),
         queryKey: ['myDonatedFoods', user?.email],
         enabled: !!user?.email,
     });
+
+
+
 
     const handleDelete = async id => {
         // Show SweetAlert confirmation dialog
@@ -78,7 +81,7 @@ const ManageMyFoods = () => {
     };
 
     if (isLoading) return <Loading></Loading>;
-    if (isError) return <Error></Error>;
+    if (isError || error) return <Error></Error>;
 
     return (
         <div>
@@ -113,25 +116,25 @@ const ManageMyFoods = () => {
                     <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
                         <div className="modal-box">
                             {/* modal form */}
-                            <form onSubmit={handleSubmit((data) =>onSubmit(data, food, refetch))} className="card-body">
+                            <form onSubmit={handleSubmit((data)=>onSubmit(data, food._id))} className="card-body">
                 {/* food name & food image */}
                 <div className="flex flex-col md:flex-row gap-4 w-full">
                     <div className="form-control w-full">
                         <label className="label">
                             <span className="label-text font-medium">Food Name</span>
                         </label>
-                        <input defaultValue={food.foodName}
+                        <input
                             {...register("foodName", { required: true })}
-                            type="text" placeholder="food name" className="input input-bordered" required />
+                            type="text" placeholder="food name" className="input input-bordered" required defaultValue={food.foodName} onChange={(e) => setValue("foodName", e.target.value)}/>
                         {errors.foodName && <span className="text-red-500">This field is required</span>}
                     </div>
                     <div className="form-control w-full">
                         <label className="label">
                             <span className="label-text font-medium">Food Image</span>
                         </label>
-                        <input defaultValue={food.foodImage}
+                        <input
                             {...register("foodImage", { required: true })}
-                            type="text" placeholder="food image URL" className="input input-bordered" required />
+                            type="text" placeholder="food image URL" className="input input-bordered" required defaultValue={food.foodImage} onChange={(e) => setValue("foodImage", e.target.value)}/>
                         {errors.foodImage && <span className="text-red-500">This field is required</span>}
                     </div>
                 </div>
@@ -142,18 +145,18 @@ const ManageMyFoods = () => {
                         <label className="label">
                             <span className="label-text font-medium">Food Quantity</span>
                         </label>
-                        <input defaultValue={food.foodQuantity}
+                        <input
                             {...register("foodQuantity", { required: true, min: 1 })}
-                            type="number" placeholder="food amount" className="input input-bordered" required />
+                            type="number" placeholder="food amount" className="input input-bordered" required defaultValue={food.foodQuantity} onChange={(e) => setValue("foodQuantity", e.target.value)}/>
                         {errors.foodQuantity && <span className="text-red-500">This field is required</span>}
                     </div>
                     <div className="form-control w-full">
                         <label className="label">
                             <span className="label-text font-medium">Pickup Location</span>
                         </label>
-                        <input defaultValue={food.pickupLocation}
+                        <input
                             {...register("pickupLocation", { required: true })}
-                            type="text" placeholder="type pickup location" className="input input-bordered" required />
+                            type="text" placeholder="type pickup location" className="input input-bordered" required defaultValue={food.pickupLocation} onChange={(e) => setValue("pickupLocation", e.target.value)}/>
                         {errors.pickupLocation && <span className="text-red-500">This field is required</span>}
                     </div>
                 </div>
@@ -164,9 +167,9 @@ const ManageMyFoods = () => {
                         <label className="label">
                             <span className="label-text font-medium">Expired Date</span>
                         </label>
-                        <input defaultValue={food.expiredDate}
+                        <input
                             {...register("expiredDate", { required: true })}
-                            type="date" placeholder="food name" className="input input-bordered" required />
+                            type="date" placeholder="food name" className="input input-bordered" required defaultValue={food.expiredDate} onChange={(e) => setValue("expiredDate", e.target.value)}/>
                         {errors.expiredDate && <span className="text-red-500">This field is required</span>}
                     </div>
                     <div className="form-control w-full">
@@ -174,9 +177,8 @@ const ManageMyFoods = () => {
                             <span className="label-text font-medium">Additional Notes</span>
                         </label>
                         <input
-                        defaultValue={food.additionalNotes}
                             {...register("additionalNotes", { required: true })}
-                            type="text" placeholder="type additional notes here" className="input input-bordered" required />
+                            type="text" placeholder="type additional notes here" className="input input-bordered" required defaultValue={food.additionalNotes} onChange={(e) => setValue("additionalNotes", e.target.value)}/>
                         {errors.additionalNotes && <span className="text-red-500">This field is required</span>}
                     </div>
                 </div>
@@ -187,9 +189,9 @@ const ManageMyFoods = () => {
                         <label className="label">
                             <span className="label-text font-medium">Donator Name</span>
                         </label>
-                        <input defaultValue={food.donatorName}
-                            {...register("donatorName")}
-                            type="text" placeholder="food name" className="input input-bordered" />
+                        <input 
+                            {...register("donatorName",{required: true})}
+                            type="text" placeholder="food name" className="input input-bordered" required defaultValue={food.donatorName} onChange={(e) => setValue("donatorName", e.target.value)}/>
                              
                     
                     </div>
@@ -198,9 +200,9 @@ const ManageMyFoods = () => {
                             <span className="label-text font-medium">Donator Image</span>
                         </label>
                         <input
-                        defaultValue={food.donatorImage}
+                        
                             {...register("donatorImage", { required: true })}
-                            type="text" placeholder="" className="input input-bordered"/>
+                            type="text" placeholder="" className="input input-bordered" defaultValue={food.donatorImage} required onChange={(e) => setValue("donatorImage", e.target.value)}/>
                             
                     
                     </div>
@@ -212,9 +214,9 @@ const ManageMyFoods = () => {
                         <label className="label">
                             <span className="label-text font-medium">Donator Email</span>
                         </label>
-                        <input defaultValue={food.donatorEmail}
-                            {...register("donatorEmail")}
-                            type="text" placeholder="food name" className="input input-bordered"/>
+                        <input 
+                            {...register("donatorEmail", {required: true})}
+                            type="text" placeholder="food name" className="input input-bordered" defaultValue={food.donatorEmail} required onChange={(e) => setValue("donatorEmail", e.target.value)}/>
                              
                        
                     </div>
@@ -223,9 +225,8 @@ const ManageMyFoods = () => {
                             <span className="label-text font-medium">Food Status</span>
                         </label>
                         <input
-                        defaultValue={food?.foodStatus || 'available'} readOnly
                             {...register("foodStatus")}
-                            type="text" placeholder="" className="input input-bordered" />
+                            type="text" placeholder="" className="input input-bordered" defaultValue={food?.foodStatus || 'available'} onChange={(e) => setValue("foodStatus", e.target.value)}/>
                              
                         
                     </div>

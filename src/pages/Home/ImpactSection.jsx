@@ -24,6 +24,32 @@ const ImpactSection = () => {
               </div>
             </div>
           </div>
+          {/* const {mutateAsync} = useMutation({
+        mutationFn: async ({id})=>{
+            const {data} = await axiosSecure.put(`/update/${id}`)
+            console.log(data);
+        },
+        onSuccess: ()=>{
+            refetch()
+            toast.success('Food Updated Successfully!')
+        }
+    })
+
+    const fetchDonatedFoods = async () => {
+        const {data} = await axiosSecure.get(`/manageMyFoods/${user?.email}`);
+        return data;
+    };
+
+    const { data: myDonatedFoods = [], isLoading, isError, error, refetch } = useQuery({
+        queryFn: () => fetchDonatedFoods(),
+        queryKey: ['myDonatedFoods', user?.email],
+        enabled: !!user?.email,
+    });
+
+    const onSubmit = async (data, id) => {
+        console.log(data);
+        await mutateAsync({id})
+    }; */}
         </section>
       );
 };

@@ -3,9 +3,11 @@ import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet-async";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const AddAFood = () => {
     const {user} = useAuth()
+    const axiosSecure = useAxiosSecure()
     const {
         register,
         handleSubmit,
@@ -19,7 +21,7 @@ const AddAFood = () => {
             ...data, donatorEmail: user?.email, donatorName: user?.displayName, donatorImage: user?.photoURL, foodStatus: "available" 
         }
         try {
-            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/addFood`, newFood)
+            const { data } = await axiosSecure.post(`/addFood`, newFood)
             if(data?.insertedId){
                 toast.success('Your Food Added!')
                 console.log(data);

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import Error from "./Error";
 import { Helmet } from "react-helmet-async";
+import Loading from "./Loading";
 
 const AvailableFoods = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -33,7 +34,7 @@ const AvailableFoods = () => {
         setSortByExpiredDate(true);
     };
 
-    if (isLoading) return <div>Loading...</div>
+    if (isLoading) return <Loading></Loading>
     if (isError) return <Error />;
 
     return (
