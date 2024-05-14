@@ -9,8 +9,8 @@ Welcome to Food Bridge, a platform dedicated to bridging the gap between food do
 - **Donation Management:** Manage your food donations easily through our intuitive interface.
 - **Real-Time Updates:** Get real-time updates on the status of your donations and their impact.
 - **Secure Transactions:** Rest assured that your donations are handled securely and efficiently.
-- **Community Engagement:** Join a community of like-minded individuals dedicated to making a positive impact through food charity.
-- **Feedback and Support:** Provide feedback and receive support to improve your donation experience.
+- **Community Engagement:** Join a community of like-minded individuals dedicated to making a positive impact through food charity by login/sign up.
+- **Easy to request for a food:** Get you food from the charity by just one click and make sure that you are logged in.
 
 ## Getting Started
 
