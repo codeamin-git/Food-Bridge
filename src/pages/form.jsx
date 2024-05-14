@@ -10,9 +10,11 @@ import toast from "react-hot-toast";
 import Swal from 'sweetalert2';
 import Loading from "./Loading";
 import { Helmet } from "react-helmet-async";
-import axios from "axios";
 
-const ManageMyFoods = () => {
+
+
+const form = () => {
+
     const axiosSecure = useAxiosSecure();
     const { user } = useAuth();
     const [currentFood, setCurrentFood] = useState(null);
@@ -27,7 +29,6 @@ const ManageMyFoods = () => {
     const onSubmit = async (data) => {
         data.foodQuantity = parseInt(data.foodQuantity);
         const updatedFood = { ...data };
- console.log(updatedFood);
 
         try {
             await axiosSecure.put(`/update/${currentFood._id}`, updatedFood);
@@ -84,45 +85,7 @@ const ManageMyFoods = () => {
 
     return (
         <div>
-            <Helmet>
-                <title>Food Bridge | Manage My Food</title>
-            </Helmet>
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th>Food Name</th>
-                        <th>Quantity</th>
-                        <th>Expiration Date</th>
-                        <th>Update/Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {myDonatedFoods.map((food) => (
-                        <tr key={food._id}>
-                            <td className="flex items-center gap-1">
-                                <img src={food.foodImage} alt="" className="w-12 rounded-lg" />
-                                {food.foodName}
-                            </td>
-                            <td>{food.foodQuantity}</td>
-                            <td>{food.expiredDate}</td>
-                            <td>
-                                <div className="flex items-center gap-4">
-                                    <button onClick={() => handleUpdateClick(food)}>
-                                        <GrUpdate className="text-green-500 text-base" />
-                                    </button>
-                                    <button onClick={() => handleDelete(food._id)}>
-                                        <RiDeleteBin6Line className="text-red-500 text-lg" />
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
-            <dialog id="update_modal" className="modal modal-bottom sm:modal-middle">
-                <div className="modal-box">
-                <form onSubmit={handleSubmit(onSubmit)} className="card-body">
+            <form onSubmit={handleSubmit(onSubmit)} className="card-body">
                         {/* food name & food image */}
                         <div className="flex flex-col md:flex-row gap-4 w-full">
                             <div className="form-control w-full">
@@ -234,15 +197,8 @@ const ManageMyFoods = () => {
                             <input type="submit" value="Update" className="btn btn-success" />
                         </div>
                     </form>
-                    <div className="flex justify-center">
-                        <form method="dialog">
-                            <button className="btn btn-error">Close</button>
-                        </form>
-                    </div>
-                </div>
-            </dialog>
         </div>
     );
 };
 
-export default ManageMyFoods;
+export default form;
