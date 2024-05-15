@@ -12,7 +12,8 @@ const AvailableFoods = () => {
     const [sortByExpiredDate, setSortByExpiredDate] = useState(false);
 
     const { data: foods, isLoading, isError, error, refetch } = useQuery({
-        queryFn: () => axios(`${import.meta.env.VITE_API_URL}/availableFoods`)
+        queryFn: () => axios(`${import.meta.env.VITE_API_URL}/availableFoods`),
+        queryKey: ['availableFoods']
     });
 
     const filteredFoods = foods?.data?.filter(food =>

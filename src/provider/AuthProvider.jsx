@@ -14,6 +14,7 @@ import {
 
 import axios from 'axios'
 import app from '../firebase/firebase.config'
+import toast from 'react-hot-toast'
 
 export const AuthContext = createContext(null)
 const auth = getAuth(app)
@@ -45,12 +46,13 @@ const AuthProvider = ({ children }) => {
     }
 
     const logOut = async () => {
-      setUser(null)
       setLoading(true)
-      const { data } = await axios(`${import.meta.env.VITE_API_URL}/logout`, {
+      setUser(null)
+      const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/logout`, {
         withCredentials: true,
       })
       console.log(data)
+      toast.success('You are logged out.')
       return signOut(auth)
     }
 

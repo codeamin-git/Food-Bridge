@@ -41,12 +41,10 @@ const SignUp = () => {
             )
             
             console.log(res);
-            // Navigate and show success message
             navigate(from);
             toast.success("Successfully Registered!");
         } catch (error) {
             console.error(error);
-            // Handle error if any
         }
     }
     
