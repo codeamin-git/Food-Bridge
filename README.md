@@ -17,13 +17,13 @@ Welcome to Food Bridge, a platform dedicated to bridging the gap between food do
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/codeamin-git/Artisan-Alley.git
+   git clone https://github.com/codeamin-git/Food-Bridge.git
    ```
 
 2. **Navigate into the project directory:**
 
    ```bash
-   cd Artisan-Alley
+   cd Food-Bridge
    ```
 
 3. **Install dependencies:**
