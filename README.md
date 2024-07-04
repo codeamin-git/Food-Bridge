@@ -1,6 +1,6 @@
 # Food Bridge
 
-live-link: [https://food-bridge-59aa8.web.app/]
+live-link: https://food-bridge-59aa8.web.app/
 
 Welcome to Food Bridge, a platform dedicated to bridging the gap between food donors and those in need. With Food Bridge, you can easily donate excess food to help feed people in your community.
 
@@ -11,6 +11,25 @@ Welcome to Food Bridge, a platform dedicated to bridging the gap between food do
 - **Secure Transactions:** Rest assured that your donations are handled securely and efficiently.
 - **Community Engagement:** Join a community of like-minded individuals dedicated to making a positive impact through food charity by login/sign up.
 - **Easy to request for a food:** Get you food from the charity by just one click and make sure that you are logged in.
+
+## How to Clone and Run This Repository
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/codeamin-git/Artisan-Alley.git
+   ```
+
+2. **Navigate into the project directory:**
+
+   ```bash
+   cd Artisan-Alley
+   ```
+
+3. **Install dependencies:**
+
+   ```bash
+   npm install
 
 ## Getting Started
 
